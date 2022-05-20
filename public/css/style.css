@@ -4,6 +4,9 @@
 
 .root {
     font-family: 'Roboto';
-    background-color: #FB6B6B;
+    background-color: #FFFFFF;
     height: 100vh;
+}
+span{
+    display: block;
 }
