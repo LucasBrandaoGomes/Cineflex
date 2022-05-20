@@ -1,0 +1,9 @@
+* {
+    box-sizing: border-box;
+}
+
+.root {
+    font-family: 'Roboto';
+    background-color: #FB6B6B;
+    height: 100vh;
+}
