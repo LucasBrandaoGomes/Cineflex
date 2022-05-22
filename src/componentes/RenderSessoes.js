@@ -2,6 +2,7 @@ import styled from "styled-components"
 import axios from "axios"
 import { useParams } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
+import Top from "./Top";
 
 function HorariosSessoes({horarioSessao}){
     return(
@@ -29,11 +30,14 @@ export default function RenderSessoes(){
       }, []);
 
     return(
+        <>
+        <Top children={"nomeDoFilmeEscolhido"}/>
         <Horarios>
             {sessoes.length === 0 ? 'Carregando sessões...' :
                 sessoes.map(sessao => <Horario> <Sessoes dia={sessao.weekday} data={sessao.date}/>
                 <Hora sessao={sessao} key=""/></Horario>)}
         </Horarios>
+        </>
 
     )  
 }

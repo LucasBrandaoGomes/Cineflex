@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-export default function Top(){
+export default function Top({children}){
     return(
         <ContainerTopo>
             <Topo1>
                 <span>CINEFLEX</span>
             </Topo1>
             <Topo2>
-                <span> Selecione o filme</span>
+                <span>{children}</span>
             </Topo2>
         </ContainerTopo>
            

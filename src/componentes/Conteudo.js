@@ -2,8 +2,10 @@ import styled from "styled-components"
 import axios from "axios"
 import { Link } from 'react-router-dom';
 import React, {useEffect} from 'react';
+import Top from "./Top";
 
 function FotoFilme({source, id}){
+        
     return (
         <Link to={`/sessoes/${id}`}>
           <img src={source}  alt="Cartazes dos filmes"/>
@@ -13,6 +15,8 @@ function FotoFilme({source, id}){
   
 export default function Conteudo(){
     const [filmes, setFilmes] = React.useState([]);
+    const [nomeDoFilmeEscolhido, setNomeDoFilmeEscolhido] = React.useState("");
+
     
     useEffect(() => {
     
@@ -24,12 +28,14 @@ export default function Conteudo(){
 
     
     return(
+        <>
+        <Top children={"Selecione um filme"}/>
         <ContainerConteudo>
                 {filmes.length === 0 ? 'Carregando filmes em cartaz...' :
                 filmes.map((filme,index) => <CartazFilme><FotoFilme source={filme.posterURL} key={index} id={filme.id}/></CartazFilme>)
                 }
         </ContainerConteudo>
-    
+        </>
     )
 }
 const ContainerConteudo =styled.div`
