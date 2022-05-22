@@ -1,12 +1,15 @@
 import styled from "styled-components"
 import axios from "axios"
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import Top from "./Top";
 
-function HorariosSessoes({horarioSessao}){
+function HorariosSessoes({horarioSessao, id}){
     return(
-        <button>{horarioSessao}</button>
+        <Link to={`/assentos/${id}`}>
+            <button>{horarioSessao}</button>
+        </Link>
     )
 }
 
@@ -42,7 +45,7 @@ export default function RenderSessoes(){
     )  
 }
 function Hora({sessao}){
-    return sessao.showtimes.map(dia => <HorariosSessoes horarioSessao={dia.name}/>)
+    return sessao.showtimes.map(dia => <HorariosSessoes horarioSessao={dia.name} id={dia.id}/>)
 
 }
 

@@ -15,8 +15,6 @@ function FotoFilme({source, id}){
   
 export default function Conteudo(){
     const [filmes, setFilmes] = React.useState([]);
-    const [nomeDoFilmeEscolhido, setNomeDoFilmeEscolhido] = React.useState("");
-
     
     useEffect(() => {
     
