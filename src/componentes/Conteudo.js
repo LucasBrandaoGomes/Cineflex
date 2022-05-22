@@ -1,20 +1,20 @@
 import styled from "styled-components"
 import axios from "axios"
-//import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import React, {useEffect} from 'react';
 
-function FotoFilme({source}){
+function FotoFilme({source, id}){
     return (
-        //<Link to={`/image/${id}`}>//
+        <Link to={`/sessoes/${id}`}>
           <img src={source}  alt="Cartazes dos filmes"/>
-        //</Link>//
+        </Link>
     );
   }
-
+  
 export default function Conteudo(){
-    const [filmes, setFilmes] = useState([]);
-
-  useEffect(() => {
+    const [filmes, setFilmes] = React.useState([]);
+    
+    useEffect(() => {
     
     const promise = axios.get('https://mock-api.driven.com.br/api/v5/cineflex/movies');
     promise.then((response) => {
@@ -26,7 +26,7 @@ export default function Conteudo(){
     return(
         <ContainerConteudo>
                 {filmes.length === 0 ? 'Carregando filmes em cartaz...' :
-                filmes.map(filme => <CartazFilme><FotoFilme source={filme.posterURL}/></CartazFilme>)
+                filmes.map((filme,index) => <CartazFilme><FotoFilme source={filme.posterURL} key={index} id={filme.id}/></CartazFilme>)
                 }
         </ContainerConteudo>
     
@@ -34,7 +34,6 @@ export default function Conteudo(){
 }
 const ContainerConteudo =styled.div`
     display:flex;
-    //flex-direction: column;
     width:375px;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -54,5 +53,8 @@ const CartazFilme = styled.div`
     img{ 
         width: 129px;
         height: 193px;
+    }
+    :hover{
+        cursor:pointer;
     }
     `
