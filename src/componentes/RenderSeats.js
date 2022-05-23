@@ -4,18 +4,26 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import Top from "./Top";
+import Footer from "./Footer"
 
 export default function RenderSeats(){
     
     const { idSessao } = useParams();
     const [lugares, setLugares] = React.useState([])
-    const [nomeComprador, setNomeComprador] = useState("");
-    const [cpf, setCPF] = useState("");
+    const [infos, setInfos] = React.useState({})
+    const [dataDia, setDataDia] = React.useState({})
+    const [horario, setHorario] = React.useState("")
+    const [nomeComprador, setNomeComprador] = React.useState("");
+    const [cpf, setCPF] = React.useState("");
+    const [assentosSelecionados, setAssentosSlecionados] = React.useState([])
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
         promise.then((response) => {
           setLugares([...response.data.seats]);
+          setInfos({...response.data.movie})
+          setDataDia({...response.data.day})
+          setHorario(response.data.name)
         });
       }, []);
     
@@ -41,6 +49,7 @@ export default function RenderSeats(){
             <Link to={"/sucesso"}>
                 <ReservarAssento>Reservar assento(os)</ReservarAssento>
             </Link>
+            <Footer imgFilme={infos.posterURL} tituloFilme={infos.title} texto1={dataDia.weekday} texto2={dataDia.date}/>
         </Tela3>
     )
 }
