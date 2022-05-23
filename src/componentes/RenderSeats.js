@@ -1,14 +1,17 @@
 import styled from "styled-components"
 import axios from "axios"
-import { useParams } from 'react-router-dom';
+import { useParams,  useNavigate} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import Top from "./Top";
 import Footer from "./Footer"
+import Lugares from "./Lugares"
 
-export default function RenderSeats(){
+export default function RenderSeats({setReserva, reserva}){
     
+    const navigate = useNavigate();
     const { idSessao } = useParams();
+    const [filme, setFilme] = React.useState("")
     const [lugares, setLugares] = React.useState([])
     const [infos, setInfos] = React.useState({})
     const [dataDia, setDataDia] = React.useState({})
@@ -16,7 +19,37 @@ export default function RenderSeats(){
     const [nomeComprador, setNomeComprador] = React.useState("");
     const [cpf, setCPF] = React.useState("");
     const [assentosSelecionados, setAssentosSlecionados] = React.useState([])
+    
+    function submitData(event) {
+        event.preventDefault();
+        const envio =
+        {
+            ids: assentosSelecionados.map(assento=>assento.id),
+            name: nomeComprador,
+            cpf: cpf
+        }
+        const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many",envio
+            );
 
+        promise.then(response =>{
+            setReserva({
+                title: filme.title,
+                date: dataDia,
+                hour:horario,
+                //places: assentosSelecionados.map(assento=>assento.id),
+                name: nomeComprador,
+                cpf:cpf
+            })
+
+            navigate("/sucesso");
+        })
+
+        setNomeComprador("");
+        setCPF("");
+      }
+
+    console.log(reserva)
+    
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
         promise.then((response) => {
@@ -24,43 +57,49 @@ export default function RenderSeats(){
           setInfos({...response.data.movie})
           setDataDia({...response.data.day})
           setHorario(response.data.name)
+          setFilme(response.data.movie)
         });
       }, []);
     
-
+    function Trocar(nome, id){
+        if (!assentosSelecionados.some(lugar => lugar.id === id)){
+            setAssentosSlecionados([...assentosSelecionados, {nome, id}])
+        }else{
+            setAssentosSlecionados(assentosSelecionados.filter(lugar  => lugar.id !== id))
+        }
+    }
+      
     return(
         <Tela3>
             <Top children={"Selecione o(s) assento(s)"}/>
             <ContainerAssentos>
                 {lugares.length === 0 ? 'Carregando assentos...' :
-                        lugares.map(lugar => <Lugares numero={lugar.name} disponibilidade={lugar.isAvailable}/>)}
+                        lugares.map((lugar,index) => <Lugares 
+                                            nome={lugar.name}
+                                            disponibilidade={lugar.isAvailable}
+                                            key={index}
+                                            id={lugar.id}
+                                            clicado={(nome, id) => Trocar(nome, id)}
+                                            selecionado={assentosSelecionados.some(item => item.id ===lugar.id)}
+                                            />)}
             </ContainerAssentos>
             <ContainerStatusAssento>
                 <div><Selecionado></Selecionado><p>Selecionado</p></div>
                 <div><Disponivel></Disponivel><p>Disponivel</p></div>
                 <div><Indisponivel></Indisponivel><p>Indisponivel</p></div>
             </ContainerStatusAssento>
-            <Form>
-                <label for="campoNome">Nome do comprador:</label>
+            <Form onSubmit={submitData}>
+                <label htmlFor="campoNome">Nome do comprador:</label>
                 <input type="text" placeholder="Digite seu nome" id="campoNome" value={nomeComprador} onChange={e => setNomeComprador(e.target.value)} required/>
-                <label for="campoNome">Nome:</label>
-                <input type="text" placeholder="Digite seu CPF" id="campoNome" value={cpf} onChange={e => setCPF(e.target.value)} required/>
-            </Form>
+                <label htmlFor="campoCPF">CPF:</label>
+                <input type="number" placeholder="Digite seu CPF" id="campoCPF" value={cpf} onChange={e => setCPF(e.target.value)} required/>
+            </Form >
             <Link to={"/sucesso"}>
-                <ReservarAssento>Reservar assento(os)</ReservarAssento>
+                <ReservarAssento type="submit">Reservar assento(os)</ReservarAssento>
             </Link>
             <Footer imgFilme={infos.posterURL} tituloFilme={infos.title} texto1={dataDia.weekday} texto2={dataDia.date}/>
         </Tela3>
     )
-}
-
-function Lugares({numero, disponibilidade}){
-    return(
-        <Assento disponibilidade={disponibilidade}>
-            {numero.length >=2 ? <p>{numero}</p> : <p>{`0${numero}`}</p>}
-        </Assento>
-    )
-
 }
 
 const Form = styled.form`
@@ -115,31 +154,7 @@ const ContainerAssentos = styled.div`
     padding-left: 24px;
     padding-right: 17px;
     `
-const Assento = styled.button`
-    width: 26px;
-    height: 26px;
-    margin-right:7px;
-    margin-bottom:18px;
 
-    background: ${(props) => props.disponibilidade ? "#C3CFD9" : "#FBE192"};
-    border: 1px solid ${(props) => props.disponibilidade ? "#808F9D" : "#F7C52B"};
-    border-radius: 12px;
-    position:relative;
-
-    p{
-        font-family: 'Roboto';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13px;
-        letter-spacing: 0.04em;
-
-        color: #000000;
-        position: absolute;
-        left: 5px;
-        bottom: 7px;;
-    }
-    `
 const ContainerStatusAssento = styled.div`
     display:flex;
     justify-content:space-around;

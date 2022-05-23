@@ -59,10 +59,8 @@ const Rodape = styled.div`
 
         color: #293845;
         }
-
-        }
     }
-    }
+    
     h1{
         font-family: 'Roboto';
         font-style: normal;
@@ -74,5 +72,5 @@ const Rodape = styled.div`
 
         color: #293845;
         }
-    }
+    
     `

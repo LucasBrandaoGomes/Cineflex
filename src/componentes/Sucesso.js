@@ -1,27 +1,29 @@
 import Top from "./Top"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components"
 
-
-export default function Sucesso(){
+export default function Sucesso({reserva}){
     
-    function Informacoes({titulo, texto1, texto2, texto3}){
-        return(
-            <div>
-                <h1>{titulo}</h1>
-                <p>{texto1} {texto2}</p>
-                <p>{texto3}</p>    
-            </div>    
-        )
-    }
+    const{title,date,hour,places,name,cpf}=reserva;
     
+    console.log("------")
     return(
         <>
             <Top children={"Pedido feito com sucesso!"}/>
-            <Informacoes titulo={"Filme e sessão"} texto1={"NOME DO FILME"} texto2={"DATA E HORARIOS DO FILME"}/>
-            <h1>Ingressos</h1>
-            <p>Assento x</p>
-            <Informacoes titulo={"Comprador"} texto1={"Nome:"} texto2={"lucas brandao gomes"} texto3={"CPF: 111111111-31"}/>
+                <div>
+                    <h3>Filme e sessão</h3>
+                    <p>{title}</p>
+                    <p>{date} {hour}</p>
+                </div>
+                <div>
+                    <h3>Ingressos</h3>
+                    {/*<p>{places.map(seat=>`Assento ${seat.name}`)}</p>*/}
+                </div>
+                <div>
+                    <h3>Comprador</h3>
+                    <p>{name}</p>
+                    <p>{cpf}</p>
+                </div>  
             <Link to={"/"}>
                 <Home>Voltar para Home</Home>
             </Link>
