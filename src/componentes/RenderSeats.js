@@ -35,7 +35,7 @@ export default function RenderSeats({setReserva, reserva}){
                 title: filme.title,
                 date: dataDia,
                 hour:horario,
-                //places: assentosSelecionados.map(assento=>assento.id),
+                places: assentosSelecionados.map(assento=>assento.id),
                 name: nomeComprador,
                 cpf:cpf
             })

@@ -16,7 +16,7 @@ export default function Sucesso({reserva}){
                 </Sala>
                 <Tickets>
                     <h3>Ingressos</h3>
-                    {/*<p>{places.map(seat=>`Assento ${seat.name}`)}</p>*/}
+                    <p>{places.map(seat=>`Assento ${seat}`)}</p>
                 </Tickets>
                 <Dados>
                     <h3>Comprador</h3>
@@ -89,6 +89,16 @@ const Tickets = styled.div`
         line-height: 28px;
         letter-spacing: 0.04em;
         margin-bottom:10px;
+
+        color: #293845;
+    }
+    p{
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 26px;
+        letter-spacing: 0.04em;
 
         color: #293845;
     }
