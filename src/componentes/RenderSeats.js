@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import axios from "axios"
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import Top from "./Top";
 
@@ -8,6 +9,8 @@ export default function RenderSeats(){
     
     const { idSessao } = useParams();
     const [lugares, setLugares] = React.useState([])
+    const [nomeComprador, setNomeComprador] = useState("");
+    const [cpf, setCPF] = useState("");
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
@@ -16,35 +19,80 @@ export default function RenderSeats(){
         });
       }, []);
     
-      function Lugares(lugares, {numero}){
-        const [statusAssento, setStatusAssento] = React.useState("")
-    
-        lugares.map(lugar => setStatusAssento(...lugar.isAvailable))
-        console.log(statusAssento)
-        return(
-            <Assento>
-                {numero.length >=2 ? <p>{numero}</p> : <p>{`0${numero}`}</p>}
-            </Assento>
-        )
-    }  
 
     return(
         <Tela3>
             <Top children={"Selecione o(s) assento(s)"}/>
             <ContainerAssentos>
                 {lugares.length === 0 ? 'Carregando assentos...' :
-                        lugares.map(lugar => <Lugares numero={lugar.name} />)}
+                        lugares.map(lugar => <Lugares numero={lugar.name} disponibilidade={lugar.isAvailable}/>)}
             </ContainerAssentos>
             <ContainerStatusAssento>
                 <div><Selecionado></Selecionado><p>Selecionado</p></div>
                 <div><Disponivel></Disponivel><p>Disponivel</p></div>
                 <div><Indisponivel></Indisponivel><p>Indisponivel</p></div>
             </ContainerStatusAssento>
-            <ReservarAssento>Reservar assento(os)</ReservarAssento>
+            <Form>
+                <label for="campoNome">Nome do comprador:</label>
+                <input type="text" placeholder="Digite seu nome" id="campoNome" value={nomeComprador} onChange={e => setNomeComprador(e.target.value)} required/>
+                <label for="campoNome">Nome:</label>
+                <input type="text" placeholder="Digite seu CPF" id="campoNome" value={cpf} onChange={e => setCPF(e.target.value)} required/>
+            </Form>
+            <Link to={"/sucesso"}>
+                <ReservarAssento>Reservar assento(os)</ReservarAssento>
+            </Link>
         </Tela3>
     )
 }
 
+function Lugares({numero, disponibilidade}){
+    return(
+        <Assento disponibilidade={disponibilidade}>
+            {numero.length >=2 ? <p>{numero}</p> : <p>{`0${numero}`}</p>}
+        </Assento>
+    )
+
+}
+
+const Form = styled.form`
+    display:flex;
+    flex-direction: column;
+    margin-top: 42px;
+    margin-bottom: 50px;
+
+    label{
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+
+        color: #293845;
+    }
+
+    input{
+        width: 327px;
+        height: 51px;
+
+        background: #FFFFFF;
+        border: 1px solid #D5D5D5;
+        border-radius: 3px;
+        margin-bottom:7px;
+
+        font-family: 'Roboto';
+        font-style: italic;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+
+        color: #AFAFAF;
+    }
+
+    `
 
 const Tela3 = styled.div`
     display:flex;
@@ -64,8 +112,8 @@ const Assento = styled.button`
     margin-right:7px;
     margin-bottom:18px;
 
-    background: red;  {/*${(props) => props.disponibilidade ? "red" : "blue"};*/}
-    border: 1px solid #808F9D;
+    background: ${(props) => props.disponibilidade ? "#C3CFD9" : "#FBE192"};
+    border: 1px solid ${(props) => props.disponibilidade ? "#808F9D" : "#F7C52B"};
     border-radius: 12px;
     position:relative;
 
@@ -140,6 +188,9 @@ const ReservarAssento = styled.button`
 
     background: #E8833A;
     border-radius: 3px;
+    margin-bottom: 27px;
+
+    text-decoration: none; 
     
     font-family: 'Roboto';
     font-style: normal;
