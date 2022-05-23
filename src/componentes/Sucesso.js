@@ -6,7 +6,6 @@ export default function Sucesso({reserva}){
     
     const{title,date,hour,places,name,cpf}=reserva;
     
-    console.log("------")
     return(
         <>
             <Top children={"Pedido feito com sucesso!"}/>
@@ -32,8 +31,6 @@ export default function Sucesso({reserva}){
         
     )
 }
-//fazer função de zerar tudo e chamar no botao Home//
-
 
 const Home = styled.button`
     width: 225px;

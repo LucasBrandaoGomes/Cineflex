@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import axios from "axios"
 import { useParams,  useNavigate} from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import Top from "./Top";
 import Footer from "./Footer"
@@ -93,10 +92,8 @@ export default function RenderSeats({setReserva, reserva}){
                 <input type="text" placeholder="Digite seu nome" id="campoNome" value={nomeComprador} onChange={e => setNomeComprador(e.target.value)} required/>
                 <label htmlFor="campoCPF">CPF:</label>
                 <input type="number" placeholder="Digite seu CPF" id="campoCPF" value={cpf} onChange={e => setCPF(e.target.value)} required/>
-            </Form >
-            <Link to={"/sucesso"}>
                 <ReservarAssento type="submit">Reservar assento(os)</ReservarAssento>
-            </Link>
+            </Form >
             <Footer imgFilme={infos.posterURL} tituloFilme={infos.title} texto1={dataDia.weekday} texto2={dataDia.date}/>
         </Tela3>
     )
